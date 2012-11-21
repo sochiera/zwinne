@@ -11,7 +11,7 @@ import junit.framework.TestCase;
 public class FTPDownloaderTest extends TestCase {
 
   public void testRun() throws IOException {
-    FTPDownloader downloader = new FTPDownloader("localhost", "/zwinne/data.csv");
+    FTPDownloader downloader = new FTPDownloader("localhost", "zwinne/data.csv");
     downloader.run();
     assertTrue(downloader.wasSuccessful());
     
