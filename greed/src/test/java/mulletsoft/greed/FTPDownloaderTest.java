@@ -23,4 +23,13 @@ public class FTPDownloaderTest extends TestCase {
    
     assertEquals(sw.toString(), f);
   }
+  
+  
+  public void testReportsBadURL(){
+    FTPDownloader downloader = new FTPDownloader("not_existing_host", "zwinne/data.csv");
+    downloader.run();
+    
+    assertFalse(downloader.wasSuccessful());
+    assertEquals(java.net.UnknownHostException.class, downloader.getError().getClass());
+  }
 }
