@@ -8,7 +8,7 @@ import org.apache.commons.net.ftp.FTPClient;
 
 
 
-public class FTPDownloader implements Runnable{
+public class FTPDownloader implements Downloader{
   private String server;
   private String file;
   
@@ -17,7 +17,7 @@ public class FTPDownloader implements Runnable{
   
   private String result;
   private boolean success = false;
-  private String error = null;
+  private Exception error = null;
   
   
   public FTPDownloader(String server, String file){
@@ -45,7 +45,7 @@ public class FTPDownloader implements Runnable{
     return result;
   }
   
-  public String getError(){
+  public Exception getError(){
     return error;
   }
   
@@ -74,8 +74,7 @@ public class FTPDownloader implements Runnable{
     }
     catch(Exception e){
       success = false;
-      error = e.toString();
-      System.out.println(error);
+      error = e;
     }
   }
 }
