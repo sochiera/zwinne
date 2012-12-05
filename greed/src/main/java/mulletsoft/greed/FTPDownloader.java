@@ -1,25 +1,23 @@
 package mulletsoft.greed;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
-import java.net.SocketException;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.net.ftp.FTPClient;
 
 
 
-public class FTPDownloader implements Runnable{
+public class FTPDownloader implements Downloader{
   private String server;
   private String file;
   
-  private String username = "";
+  private String username = "anonymous";
   private String password = "";
   
   private String result;
   private boolean success = false;
-  
+  private Exception error = null;
   
   
   public FTPDownloader(String server, String file){
@@ -47,18 +45,26 @@ public class FTPDownloader implements Runnable{
     return result;
   }
   
+  public Exception getError(){
+    return error;
+  }
+  
   public boolean wasSuccessful(){
     return success;
   }
 
   public void run() {
     FTPClient client = new FTPClient();
+    success = false;
     try{
       client.connect(server);
       client.login(username, password);
       
       InputStream is = client.retrieveFileStream(file);
-      String u = client.getReplyString();
+      if(is == null){
+        throw new Exception(client.getReplyString());
+      }
+      
       StringWriter sw = new StringWriter();
       IOUtils.copy(is, sw);
       result = sw.toString();
@@ -66,13 +72,9 @@ public class FTPDownloader implements Runnable{
       client.disconnect();
       success = true;
     }
-    catch(SocketException e){
+    catch(Exception e){
       success = false;
-      System.out.println(e.toString());
-    }
-    catch(IOException e){
-      success = false;
-      System.out.println(e.toString());
+      error = e;
     }
   }
 }

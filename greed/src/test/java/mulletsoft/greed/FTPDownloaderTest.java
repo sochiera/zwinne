@@ -11,7 +11,7 @@ import junit.framework.TestCase;
 public class FTPDownloaderTest extends TestCase {
 
   public void testRun() throws IOException {
-    FTPDownloader downloader = new FTPDownloader("localhost", "/zwinne/data.csv");
+    FTPDownloader downloader = new FTPDownloader("localhost", "zwinne/data.csv");
     downloader.run();
     assertTrue(downloader.wasSuccessful());
     
@@ -22,5 +22,14 @@ public class FTPDownloaderTest extends TestCase {
     IOUtils.copy(local, sw);
    
     assertEquals(sw.toString(), f);
+  }
+  
+  
+  public void testReportsBadURL(){
+    FTPDownloader downloader = new FTPDownloader("not_existing_host", "zwinne/data.csv");
+    downloader.run();
+    
+    assertFalse(downloader.wasSuccessful());
+    assertEquals(java.net.UnknownHostException.class, downloader.getError().getClass());
   }
 }

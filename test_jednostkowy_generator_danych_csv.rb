@@ -12,6 +12,10 @@ rowCounter = 0
 
 result = -1
 
+sum = 0.0
+sum_deviation = 0.0
+numbers = 0.0
+
 CSV.foreach($path) do |row|
 
 	if row.size != columns+2
@@ -30,19 +34,27 @@ CSV.foreach($path) do |row|
 	end
 
 	for i in 2...(row.size) do
-		if row[i].to_i > 1 or row[i].to_i < 0
-			result = rowCounter
-			break
-		end
+		sum += row[i].to_f
+		numbers += 1.0
 	end
 	rowCounter += 1
 end
 
 
+CSV.foreach($path) do |row|
+
+	for i in 2...(row.size) do
+		sum_deviation += (row[i].to_f - sum/numbers)*(row[i].to_f - sum/numbers)
+	end
+
+end
+
+
 if result == -1
-	p "ok"
+	puts "ok"
+	puts "Data is distributed around " + (sum/numbers).to_s + ". Standard deviation is " + (Math.sqrt(sum_deviation/numbers)).to_s + "."
 else
-	p result
+	puts "Data in line number " + result.to_s + " isn't correct."
 end
 
 
