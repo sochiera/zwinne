@@ -51,9 +51,17 @@ end
 
 
 if result == -1
-	puts "ok"
-	puts "Data is distributed around " + (sum/numbers).to_s + ". Standard deviation is " + (Math.sqrt(sum_deviation/numbers)).to_s + "."
+
+	if((sum/numbers) + 5.0/numbers > 0.7 and (sum/numbers) - 5.0/numbers < 0.7 and 
+	Math.sqrt(sum_deviation/numbers) + 1.0/numbers > 0.7 and Math.sqrt(sum_deviation/numbers) - 1.0/numbers < 0.7 )
+		puts "ok"
+	else
+		puts "failed"
+		puts "Data is distributed around " + (sum/numbers).to_s + ". Standard deviation is " + (Math.sqrt(sum_deviation/numbers)).to_s + "."
+	end
+	
 else
+	puts "failed"
 	puts "Data in line number " + result.to_s + " isn't correct."
 end
 
