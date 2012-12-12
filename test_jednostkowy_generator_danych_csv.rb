@@ -49,11 +49,22 @@ CSV.foreach($path) do |row|
 
 end
 
+Mean = 0.7
+Deviation = 0.5
 
 if result == -1
 
-	if((sum/numbers) + 5.0/numbers > 0.7 and (sum/numbers) - 5.0/numbers < 0.7 and 
-	Math.sqrt(sum_deviation/numbers) + 1.0/numbers > 0.7 and Math.sqrt(sum_deviation/numbers) - 1.0/numbers < 0.7 )
+	error = 0.01
+	if(numbers < 10000)
+		error += 0.1
+	end
+
+	if(numbers < 100)
+		error += 0.3
+	end
+	
+	if((sum/numbers) +  Mean and (sum/numbers) - error < Mean and 
+	Math.sqrt(sum_deviation/numbers) + error > Deviation and Math.sqrt(sum_deviation/numbers) - error < Deviation )
 		puts "ok"
 	else
 		puts "failed"
