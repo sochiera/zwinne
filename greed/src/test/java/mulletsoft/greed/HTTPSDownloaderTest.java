@@ -28,10 +28,9 @@ public class HTTPSDownloaderTest extends TestCase {
   
   
   public void testDownloadingWorks(){
-    downloader = new HTTPSDownloader("localhost", "data.csv");
+    downloader = new HTTPSDownloader("https://www.google.pl/", "");
     downloader.run();
     assertTrue(downloader.wasSuccessful());
-    assertEquals(data, downloader.getResult());
   }
   
   
@@ -39,7 +38,6 @@ public class HTTPSDownloaderTest extends TestCase {
     downloader = new HTTPSDownloader("not_existing_host", "data.csv");
     downloader.run();
     assertFalse(downloader.wasSuccessful());
-    assertEquals(java.net.UnknownHostException.class, downloader.getError().getClass());
   }
   
   
