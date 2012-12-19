@@ -1,5 +1,7 @@
 package mulletsoft.greed;
 
+import mulletsoft.greed.gui.MainWindow;
+
 /**
  * Hello world!
  *
@@ -8,6 +10,6 @@ public class App
 {
   public static void main( String[] args )
   {
-    System.out.println( "Hello World!" );
+    MainWindow mw = new MainWindow();
   }
 }
