@@ -1,4 +1,4 @@
-package mulletsoft.greed;
+package mulletsoft.greed.net;
 
 public interface Downloader extends Runnable{
   public String getResult();

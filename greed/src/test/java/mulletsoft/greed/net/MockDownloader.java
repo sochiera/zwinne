@@ -1,4 +1,6 @@
-package mulletsoft.greed;
+package mulletsoft.greed.net;
+
+import mulletsoft.greed.net.Downloader;
 
 public class MockDownloader implements Downloader {
 

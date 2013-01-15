@@ -1,8 +1,10 @@
-package mulletsoft.greed;
+package mulletsoft.greed.net;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+
+import mulletsoft.greed.net.FTPDownloader;
 
 import org.apache.commons.io.IOUtils;
 

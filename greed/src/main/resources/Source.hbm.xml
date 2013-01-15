@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+  "-//Hibernate/Hibernate Mapping DTD//EN"
+  "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="mulletsoft.greed.model.Source" table="sources">
+		<id name="id" column="id">
+			<generator class="identity" />
+		</id>
+		<property name="address" column="address" />
+		<property name="login" column="login" />
+		<property name="password" column="password" />
+	</class>
+</hibernate-mapping>

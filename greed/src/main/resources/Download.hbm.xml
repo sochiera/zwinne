@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+  "-//Hibernate/Hibernate Mapping DTD//EN"
+  "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="mulletsoft.greed.model.Download" table="downloads">
+		<id name="id" column="id">
+			<generator class="identity" />
+		</id>
+
+		<many-to-one name="user" column="who" not-null="true" />
+		<many-to-one name="source" column="source" not-null="true" />
+
+		<property name="path" column="path" />
+		<property name="downloadTime" column="time" />
+	</class>
+</hibernate-mapping>

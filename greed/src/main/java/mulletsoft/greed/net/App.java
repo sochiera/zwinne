@@ -1,4 +1,4 @@
-package mulletsoft.greed;
+package mulletsoft.greed.net;
 
 import mulletsoft.greed.gui.MainWindow;
 
