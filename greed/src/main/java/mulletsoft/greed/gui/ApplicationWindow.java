@@ -2,6 +2,7 @@ package mulletsoft.greed.gui;
 
 import java.awt.EventQueue;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
@@ -12,14 +13,37 @@ import java.awt.BorderLayout;
 import javax.swing.JScrollPane;
 import javax.swing.JPanel;
 import java.awt.FlowLayout;
+import java.util.ArrayList;
+
 import javax.swing.JButton;
-import javax.swing.JTable;
+import javax.swing.JList;
+
+import mulletsoft.greed.model.Download;
 
 public class ApplicationWindow {
 
 	private JFrame frmGreed;
-	private JTable table;
+	private JList list;
+	private java.util.List<Download> downloads;
+	private EditDataSourcesDialog edsDialog;
+	private DataSourcesDialog dsDialog;
+	private DefaultListModel listModel = new DefaultListModel();  
 
+	public void refreshList()
+	{
+		//Pobieranie listy downloadow
+		System.out.println("Pobieranie listy wszystkich downloadow");
+		this.listModel.clear();
+		int size = downloads.size();
+		for(int i = 0; i < size; i++)
+		{
+			Download d = (Download) downloads.get(i);
+			String el = d.getDownloadTime() + ": " + d.getSource() + " (" +
+				d.getPath() + ")";
+			this.listModel.addElement(el);
+		}
+	}
+	
 	/**
 	 * Launch the application.
 	 */
@@ -29,6 +53,7 @@ public class ApplicationWindow {
 				try {
 					ApplicationWindow window = new ApplicationWindow();
 					window.frmGreed.setVisible(true);
+					window.frmGreed.setLocationRelativeTo(null);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -41,6 +66,12 @@ public class ApplicationWindow {
 	 */
 	public ApplicationWindow() {
 		initialize();
+		edsDialog = new EditDataSourcesDialog();
+		edsDialog.setLocationRelativeTo(this.frmGreed);
+		dsDialog = new DataSourcesDialog();
+		dsDialog.setParent(this);
+		dsDialog.setLocationRelativeTo(this.frmGreed);
+		refreshList();
 	}
 
 	/**
@@ -51,7 +82,7 @@ public class ApplicationWindow {
 		frmGreed.setTitle("Greed");
 		frmGreed.setBounds(100, 100, 450, 300);
 		frmGreed.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+		downloads = new ArrayList<Download>();
 		JMenuBar menuBar = new JMenuBar();
 		frmGreed.setJMenuBar(menuBar);
 		
@@ -70,26 +101,50 @@ public class ApplicationWindow {
 		menuBar.add(mnDownloads);
 		
 		JMenuItem mntmDownloadData = new JMenuItem("Download data");
+		mntmDownloadData.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				dsDialog.refreshList();
+				dsDialog.setVisible(true);
+			}
+		});
 		mnDownloads.add(mntmDownloadData);
 		
 		JMenuItem mntmEditDataSources = new JMenuItem("Edit data sources");
+		mntmEditDataSources.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				edsDialog.refreshList();
+				edsDialog.setVisible(true);
+			}
+		});
 		mnDownloads.add(mntmEditDataSources);
 		frmGreed.getContentPane().setLayout(new BorderLayout(0, 0));
 		
 		JScrollPane scrollPane = new JScrollPane();
 		frmGreed.getContentPane().add(scrollPane, BorderLayout.CENTER);
-		
-		table = new JTable();
-		scrollPane.setViewportView(table);
+		this.listModel = new DefaultListModel();
+		list = new JList(this.listModel);
+		scrollPane.setViewportView(list);
 		
 		JPanel panel = new JPanel();
 		frmGreed.getContentPane().add(panel, BorderLayout.SOUTH);
 		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		JButton btnDownloadData = new JButton("Download data");
+		btnDownloadData.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				dsDialog.refreshList();
+				dsDialog.setVisible(true);
+			}
+		});
 		panel.add(btnDownloadData);
 		
 		JButton btnEditDataSources = new JButton("Edit data sources");
+		btnEditDataSources.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				edsDialog.refreshList();
+				edsDialog.setVisible(true);
+			}
+		});
 		panel.add(btnEditDataSources);
 	}
 
