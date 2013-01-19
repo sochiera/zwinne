@@ -30,7 +30,7 @@ public class ApplicationWindow {
 	private JList list;
 	private java.util.List<Download> downloads;
 	private EditDataSourcesDialog edsDialog;
-	private DataSourcesDialog dsDialog;
+	private SelectDataSourceDialog dsDialog;
 	public ActiveDownloadsDialog adDialog;
 	private DefaultListModel listModel = new DefaultListModel();  
 
@@ -94,7 +94,7 @@ public class ApplicationWindow {
     
     edsDialog = new EditDataSourcesDialog(appContext);
 		edsDialog.setLocationRelativeTo(this.frmGreed);
-		dsDialog = new DataSourcesDialog(appContext);
+		dsDialog = new SelectDataSourceDialog(appContext);
 		dsDialog.setName("dsDialog");
 		dsDialog.setParent(this);
 		dsDialog.setLocationRelativeTo(this.frmGreed);
@@ -111,6 +111,7 @@ public class ApplicationWindow {
 	 */
 	private void initialize() {
 		frmGreed = new JFrame();
+		frmGreed.setName("main-frame");
 		frmGreed.setTitle("Greed");
 		frmGreed.setBounds(100, 100, 450, 300);
 		frmGreed.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -126,6 +127,7 @@ public class ApplicationWindow {
 		mntmQuit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				dsDialog.dispose();
+		    dsDialog.setName("dsDialog");
 				edsDialog.dsDialog.dispose();
 				edsDialog.dispose();
 				frmGreed.dispose();
@@ -141,6 +143,8 @@ public class ApplicationWindow {
 			public void actionPerformed(ActionEvent arg0) {
 				dsDialog.refreshList();
 				dsDialog.setVisible(true);
+		    dsDialog.setName("dsDialog");
+
 			}
 		});
 		
@@ -149,6 +153,8 @@ public class ApplicationWindow {
 			public void actionPerformed(ActionEvent arg0) {
 				adDialog.refreshList();
 				adDialog.setVisible(true);
+		    dsDialog.setName("dsDialog");
+
 			}
 		});
 		mnDownloads.add(mntmActiveDownloads);
@@ -181,6 +187,8 @@ public class ApplicationWindow {
 			public void actionPerformed(ActionEvent arg0) {
 				dsDialog.refreshList();
 				dsDialog.setVisible(true);
+		    dsDialog.setName("dsDialog");
+
 			}
 		});
 		

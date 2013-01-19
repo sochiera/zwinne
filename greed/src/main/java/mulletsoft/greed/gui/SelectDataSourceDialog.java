@@ -26,7 +26,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
-public class DataSourcesDialog extends JDialog {
+public class SelectDataSourceDialog extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JFileChooser chooser;
@@ -102,7 +102,7 @@ public class DataSourcesDialog extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			DataSourcesDialog dialog = new DataSourcesDialog(null);
+			SelectDataSourceDialog dialog = new SelectDataSourceDialog(null);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -113,7 +113,7 @@ public class DataSourcesDialog extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public DataSourcesDialog(ApplicationContext appContext) {
+	public SelectDataSourceDialog(ApplicationContext appContext) {
 	  this.appContext = appContext;
 		sources = new ArrayList<Source>();
 		setTitle("Download data");
@@ -152,7 +152,7 @@ public class DataSourcesDialog extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton okButton = new JButton("Download");
-				okButton.setName("okButton");
+				okButton.setName("okiButton");
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						downloadData();
@@ -164,7 +164,7 @@ public class DataSourcesDialog extends JDialog {
 			}
 			{
 				JButton cancelButton = new JButton("Cancel");
-				cancelButton.setName("cancelButton");
+				cancelButton.setName("canceliButton");
 				cancelButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						hideDialog();
