@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 
+import mulletsoft.greed.model.Download;
+import mulletsoft.greed.model.Source;
 import mulletsoft.greed.net.HTTPSDownloader;
 
 import org.apache.commons.io.IOUtils;
@@ -30,14 +32,30 @@ public class HTTPSDownloaderTest extends TestCase {
   
   
   public void testDownloadingWorks(){
-    downloader = new HTTPSDownloader("www.google.pl", "");
+    Source s = new Source();
+    s.setProtocol("https");
+    s.setAddress("www.google.pl");
+    s.setPath("");
+    
+    Download d = new Download();
+    d.setSource(s);
+    
+    downloader = new HTTPSDownloader(d);
     downloader.run();
     assertTrue(downloader.wasSuccessful());
   }
   
   
   public void testReportsBadURL(){
-    downloader = new HTTPSDownloader("not_existing_host", "data.csv");
+    Source s = new Source();
+    s.setProtocol("https");
+    s.setAddress("www.a;dfjk;askldfj;aklsjdf.pk");
+    s.setPath("");
+    
+    Download d = new Download();
+    d.setSource(s);
+    
+    downloader = new HTTPSDownloader(d);
     downloader.run();
     assertFalse(downloader.wasSuccessful());
   }
