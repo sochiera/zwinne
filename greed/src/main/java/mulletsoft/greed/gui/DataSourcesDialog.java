@@ -18,6 +18,9 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JList;
 
+import org.hibernate.Session;
+
+import mulletsoft.greed.model.Download;
 import mulletsoft.greed.model.Source;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -32,13 +35,17 @@ public class DataSourcesDialog extends JDialog {
 	private ApplicationWindow parent;
 	private DefaultListModel listModel = new DefaultListModel(); 
 
+	private ApplicationContext appContext;
+	
 	public void setParent(ApplicationWindow parent){
 		this.parent = parent;
 	}
 	
 	public void refreshList()
 	{
-		//sources = all data sources;
+	  appContext.openSession();
+	  sources = appContext.getAll(Source.class);
+	  
 		System.out.println("Pobieranie listy zrodel danych");
 		this.listModel.clear();
 		int size = sources.size();
@@ -47,6 +54,8 @@ public class DataSourcesDialog extends JDialog {
 			Source s = (Source) sources.get(i);
 			this.listModel.addElement(s.getPath() + " at " + s.getAddress());
 		}
+		
+		appContext.closeSession();
 	}
 	
 	public void downloadData(){
@@ -63,12 +72,20 @@ public class DataSourcesDialog extends JDialog {
 		       String path = chooser.getSelectedFile().getPath();
 		       for(int i : selected){
 		    	   //Pobieranie danych
-		    	   Source s = sources.get(selected[i]);
+		    	   Source s = sources.get(i);
 		    	   String address = s.getAddress();
 		    	   String login = s.getLogin();
 		    	   String password = s.getPassword();
 		    	   String sourcePath = s.getPath();
 		    	   System.out.println("Pobierz dane z " + address + " i zapisz w " + path + ", dodaj informacje do bazy");
+		    	   
+		    	   Download newDownload = new Download();
+		    	   newDownload.setUser(appContext.getCurrentUser());
+		    	   newDownload.setCurrentTime();
+		    	   newDownload.setSource(s);
+		    	   newDownload.setPath(path);
+		    	   
+		    	   appContext.getDownloadManager().startDownload(newDownload);
 		       }
 		       this.parent.adDialog.refreshList();
 		       this.parent.adDialog.setVisible(true);
@@ -85,7 +102,7 @@ public class DataSourcesDialog extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			DataSourcesDialog dialog = new DataSourcesDialog();
+			DataSourcesDialog dialog = new DataSourcesDialog(null);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -96,7 +113,8 @@ public class DataSourcesDialog extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public DataSourcesDialog() {
+	public DataSourcesDialog(ApplicationContext appContext) {
+	  this.appContext = appContext;
 		sources = new ArrayList<Source>();
 		setTitle("Download data");
 		chooser = new JFileChooser();

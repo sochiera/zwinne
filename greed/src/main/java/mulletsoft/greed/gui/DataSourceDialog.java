@@ -19,6 +19,10 @@ import javax.swing.SwingConstants;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 
+import org.hibernate.Session;
+
+import mulletsoft.greed.model.Source;
+
 public class DataSourceDialog extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
@@ -29,6 +33,8 @@ public class DataSourceDialog extends JDialog {
 	public JTextField textField_1;
 	public JTextField textField_2;
 	public JComboBox comboBox;
+	
+	private ApplicationContext appContext;
 	
 	public void setParent(EditDataSourcesDialog p)
 	{
@@ -58,8 +64,18 @@ public class DataSourceDialog extends JDialog {
 			String password = this.textField_1.getText();
 			String path = this.textField_2.getText();
 			String protocol = this.comboBox.getSelectedItem().toString();
-			// dodaj do bazy (address, login, password);
-			System.out.println("Dodaj do bazy (" + address + ", " + login + ", " + password + ", " + protocol  + ")");
+			
+			Source newSource = new Source();
+			newSource.setAddress(address);
+			newSource.setLogin(login);
+			newSource.setPassword(password);
+			newSource.setPath(path);
+			newSource.setProtocol(protocol);
+			
+			appContext.openSession();
+			appContext.save(newSource);
+			appContext.closeSession();
+			
 			this.parent.refreshList();
 			this.setVisible(false);
 		}
@@ -69,8 +85,19 @@ public class DataSourceDialog extends JDialog {
 			String password = this.textField_1.getText();
 			String path = this.textField_2.getText();
 			String protocol = this.comboBox.getSelectedItem().toString();
-			// ustaw w bazie (address, login, password), gdzie id = ds_id
-			System.out.println("Ustaw w bazie (" + address + ", " + login + ", " + password + ", " + protocol + ") gdzie id = " + this.ds_id);
+			
+			Source editedSource = new Source();
+			editedSource.setId(ds_id);
+      editedSource.setAddress(address);
+      editedSource.setLogin(login);
+      editedSource.setPassword(password);
+      editedSource.setPath(path);
+      editedSource.setProtocol(protocol);
+      
+      appContext.openSession();
+      appContext.update(editedSource);
+      appContext.closeSession();
+			
 			this.parent.refreshList();
 			this.setVisible(false);
 		}
@@ -81,7 +108,7 @@ public class DataSourceDialog extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			DataSourceDialog dialog = new DataSourceDialog();
+			DataSourceDialog dialog = new DataSourceDialog(null);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -92,8 +119,9 @@ public class DataSourceDialog extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public DataSourceDialog() {
-		setBounds(100, 100, 450, 300);
+	public DataSourceDialog(ApplicationContext app) {
+	  appContext = app;
+	  setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);

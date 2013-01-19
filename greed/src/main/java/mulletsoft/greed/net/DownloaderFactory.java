@@ -8,13 +8,13 @@ public class DownloaderFactory {
   public static Downloader makeDownloader(Download download){
     Source source = download.getSource();
     
-    if(source.getProtocol().equals("http")){
+    if(source.getProtocol().equals("HTTP")){
       return new HTTPDownloader(download);
     } 
-    else if(source.getProtocol().equals("https")){
+    else if(source.getProtocol().equals("HTTPS")){
       return new HTTPSDownloader(download);
     }
-    else if(source.getProtocol().equals("ftp")){
+    else if(source.getProtocol().equals("FTP")){
       return new FTPDownloader(download);
     }
     

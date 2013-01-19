@@ -6,9 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-
+import mulletsoft.greed.gui.ApplicationContext;
 import mulletsoft.greed.model.Download;
 
 
@@ -18,10 +16,10 @@ public class DownloadManager implements Runnable{
   private LinkedList<Thread> activeDownloaders = new LinkedList<Thread>();
   private ReentrantLock activeDownloadsLock = new ReentrantLock();
   
-  private SessionFactory sessionFactory;
+  private ApplicationContext appContext;
   
-  public DownloadManager(SessionFactory sessionFactory){
-    this.sessionFactory = sessionFactory;
+  public DownloadManager(ApplicationContext appContext){
+    this.appContext = appContext;
   }
   
   
@@ -41,11 +39,9 @@ public class DownloadManager implements Runnable{
     Download download = downloader.getDownload();
     
     // save download to database
-    Session session = sessionFactory.openSession();
-    session.beginTransaction();
-    session.save(download);
-    session.getTransaction().commit();
-    session.close();
+    appContext.openSession();
+    appContext.save(download);
+    appContext.closeSession();
   }
   
   public void run(){
@@ -83,5 +79,10 @@ public class DownloadManager implements Runnable{
     } 
     activeDownloadsLock.unlock();
     return active;
+  }
+
+
+  public void setContext(ApplicationContext appContext) {
+    this.appContext = appContext;
   }
 }

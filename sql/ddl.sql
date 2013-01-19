@@ -20,11 +20,14 @@ create table sources(
 
 create table downloads(
   id serial primary key,
-  source integer references sources(id),
+  source integer references sources(id) on delete set null,
   time timestamp not null default current_timestamp,
   who integer references users(id),
   path text not null
 );
+
+insert into users values 
+  (default, 'zenon', 'asdfasdfasdfasd', 'ddd');
 
 
 grant all on users to greedy;

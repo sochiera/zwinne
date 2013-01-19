@@ -2,27 +2,27 @@ package mulletsoft.greed.gui;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
-import com.jgoodies.forms.factories.FormFactory;
-import javax.swing.JTextField;
 import javax.swing.JScrollPane;
-import javax.swing.JList;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.border.EmptyBorder;
 
 import mulletsoft.greed.model.Source;
 
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.util.ArrayList;
-import javax.swing.ListSelectionModel;
+import com.jgoodies.forms.factories.FormFactory;
+import com.jgoodies.forms.layout.ColumnSpec;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.RowSpec;
 
 public class EditDataSourcesDialog extends JDialog {
 
@@ -33,12 +33,14 @@ public class EditDataSourcesDialog extends JDialog {
 	public DataSourceDialog dsDialog;
 	private DefaultListModel listModel = new DefaultListModel();  
 
+	private ApplicationContext appContext;
+	
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		try {
-			EditDataSourcesDialog dialog = new EditDataSourcesDialog();
+			EditDataSourcesDialog dialog = new EditDataSourcesDialog(null);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -47,17 +49,17 @@ public class EditDataSourcesDialog extends JDialog {
 	}
 	
 	public void refreshList(){
-		//sources = all data sources;
-		System.out.println("Pobieranie listy zrodel danych");
+	  appContext.openSession();
+		sources = appContext.getAll(Source.class);
 		this.listModel.clear();
 		int size = sources.size();
 		for(int i = 0; i < size; i++)
 		{
 			Source s = (Source) sources.get(i);
-			String el = s.getPath() + " at " + s.getAddress() + " (login: " + s.getLogin() + ", password: " + 
-				s.getPassword() + ")";
+			String el = s.getPath() + " at " + s.getAddress();
 			this.listModel.addElement(el);
 		}
+		appContext.closeSession();
 	}
 
 	public void hideWindow(){
@@ -101,8 +103,9 @@ public class EditDataSourcesDialog extends JDialog {
 				    "Confirm delete",
 				    JOptionPane.YES_NO_OPTION);
 			if(n == 0){
-				//delete source with id = s_id
-				System.out.println("Usun zrodlo danych o id = " + s_id);
+			  appContext.openSession();
+			  appContext.delete(s);
+			  appContext.closeSession();
 				this.refreshList();
 			}
 		}
@@ -130,12 +133,14 @@ public class EditDataSourcesDialog extends JDialog {
 	
 	/**
 	 * Create the dialog.
+	 * @param appContext 
 	 */
-	public EditDataSourcesDialog() {
+	public EditDataSourcesDialog(ApplicationContext appContext) {
+	  this.appContext = appContext;
 		setTitle("Edit data sources");
 		setBounds(100, 100, 450, 300);
 		sources = new ArrayList<Source>();
-		dsDialog = new DataSourceDialog();
+		dsDialog = new DataSourceDialog(appContext);
 		dsDialog.setLocationRelativeTo(this);
 		dsDialog.setVisible(false);
 		dsDialog.setParent(this);

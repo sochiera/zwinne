@@ -26,11 +26,11 @@ public class ActiveDownloadsDialog extends JDialog {
 	private JList list;
 	private java.util.List<Download> downloads;
 	private DefaultListModel listModel = new DefaultListModel();
-	
+	private ApplicationContext appContext;
 	
 	public void refreshList(){
-		//Pobieranie listy downloadow
-		//downloads = ...
+	  appContext.openSession();
+	  downloads = appContext.getDownloadManager().getActiveDownloads();
 		System.out.println("Pobieranie listy aktywnych downloadow");
 		this.listModel.clear();
 		int size = downloads.size();
@@ -41,6 +41,7 @@ public class ActiveDownloadsDialog extends JDialog {
 				d.getPath() + ")";
 			this.listModel.addElement(el);
 		}
+		appContext.closeSession();
 	}
 
 	/**
@@ -48,7 +49,7 @@ public class ActiveDownloadsDialog extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			ActiveDownloadsDialog dialog = new ActiveDownloadsDialog();
+			ActiveDownloadsDialog dialog = new ActiveDownloadsDialog(null);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -59,7 +60,8 @@ public class ActiveDownloadsDialog extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public ActiveDownloadsDialog() {
+	public ActiveDownloadsDialog(ApplicationContext appContext) {
+	  this.appContext = appContext;
 		setTitle("Active downloads");
 		setBounds(100, 100, 450, 300);
 		downloads = new ArrayList<Download>();
