@@ -15,7 +15,6 @@ public class TestDatabase {
     jan.setName("Jan");
     jan.setPasswordHash("3ef18d32af753194e03d2d39fc7f1822");
     jan.setSalt("123");
-    
   }
   
 }

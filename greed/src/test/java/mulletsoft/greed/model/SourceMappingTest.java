@@ -12,7 +12,8 @@ public class SourceMappingTest extends MappingTest {
   public void testMapping() throws Exception {
     
     Source source = new Source();
-    source.setAddress("http://www.google.pl/");
+    source.setAddress("www.google.pl");
+    source.setProtocol("http");
     source.setPath("a/b/c");
     source.setLogin("test");
     source.setPassword("pass");
@@ -31,6 +32,7 @@ public class SourceMappingTest extends MappingTest {
     assertEquals(source.getLogin(), fromDB.getLogin());
     assertEquals(source.getPassword(), fromDB.getPassword());
     assertEquals(source.getPath(), fromDB.getPath());
+    assertEquals(source.getProtocol(), fromDB.getProtocol());
     s.close();
   }
 

@@ -10,6 +10,7 @@ create table users(
 
 create table sources(
   id serial primary key,
+  protocol text not null,
   address text not null,
   path text not null,
   login text,
