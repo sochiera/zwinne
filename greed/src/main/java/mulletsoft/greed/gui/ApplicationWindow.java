@@ -69,6 +69,7 @@ public class ApplicationWindow {
 		edsDialog = new EditDataSourcesDialog();
 		edsDialog.setLocationRelativeTo(this.frmGreed);
 		dsDialog = new DataSourcesDialog();
+		dsDialog.setName("dsDialog");
 		dsDialog.setParent(this);
 		dsDialog.setLocationRelativeTo(this.frmGreed);
 		refreshList();
@@ -92,6 +93,7 @@ public class ApplicationWindow {
 		menuBar.add(mnGreed);
 		
 		JMenuItem mntmQuit = new JMenuItem("Quit");
+		mntmQuit.setName("mntmQuit");
 		mntmQuit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				frmGreed.dispose();
@@ -132,6 +134,7 @@ public class ApplicationWindow {
 		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		JButton btnDownloadData = new JButton("Download data");
+		btnDownloadData.setName("btnDownloadData");
 		btnDownloadData.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				dsDialog.refreshList();
