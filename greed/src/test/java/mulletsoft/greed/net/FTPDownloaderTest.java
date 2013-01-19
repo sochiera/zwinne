@@ -16,6 +16,9 @@ public class FTPDownloaderTest extends TestCase {
 
     FTPDownloader downloader = new FTPDownloader("localhost", "zwinne/data.csv");
     downloader.run();
+    if(!downloader.wasSuccessful())
+      System.out.println(downloader.getError());
+    
     assertTrue(downloader.wasSuccessful());
     
     String f = downloader.getResult();

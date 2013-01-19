@@ -30,7 +30,7 @@ public class HTTPSDownloaderTest extends TestCase {
   
   
   public void testDownloadingWorks(){
-    downloader = new HTTPSDownloader("https://www.google.pl/", "");
+    downloader = new HTTPSDownloader("www.google.pl", "");
     downloader.run();
     assertTrue(downloader.wasSuccessful());
   }

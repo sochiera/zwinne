@@ -16,7 +16,7 @@ public class HTTPSDownloader implements Downloader {
   private String result;
   
   public HTTPSDownloader(String address, String file) {
-    this.address = address;
+    this.address = "https://" + address;
     this.file = file;
   }
 

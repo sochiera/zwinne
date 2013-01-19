@@ -33,7 +33,6 @@ public class DownloadMappingTest extends MappingTest {
     s.save(download);
     s.close();
     
-    
     s = getSessionFactory().openSession();
     Download fromDB = (Download) s.load(Download.class, download.getId());
     assertEquals(user.getId(), fromDB.getUser().getId());
