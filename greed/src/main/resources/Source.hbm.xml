@@ -9,6 +9,7 @@
 			<generator class="identity" />
 		</id>
 		<property name="address" column="address" />
+		<property name="path" column="path" />
 		<property name="login" column="login" />
 		<property name="password" column="password" />
 	</class>

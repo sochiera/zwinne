@@ -3,8 +3,17 @@ package mulletsoft.greed.model;
 public class Source {
   private Integer id;
   private String address;
+  private String path;
   private String login;
   private String password;
+  
+  public String getPath() {
+    return path;
+  }
+
+  public void setPath(String path) {
+    this.path = path;
+  }
   
   
   public Integer getId() {

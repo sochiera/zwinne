@@ -11,6 +11,7 @@ create table users(
 create table sources(
   id serial primary key,
   address text not null,
+  path text not null,
   login text,
   password text
 );

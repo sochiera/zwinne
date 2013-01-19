@@ -13,6 +13,7 @@ public class SourceMappingTest extends MappingTest {
     
     Source source = new Source();
     source.setAddress("http://www.google.pl/");
+    source.setPath("a/b/c");
     source.setLogin("test");
     source.setPassword("pass");
     
@@ -29,6 +30,7 @@ public class SourceMappingTest extends MappingTest {
     assertEquals(source.getAddress(), fromDB.getAddress());
     assertEquals(source.getLogin(), fromDB.getLogin());
     assertEquals(source.getPassword(), fromDB.getPassword());
+    assertEquals(source.getPath(), fromDB.getPath());
     s.close();
   }
 
