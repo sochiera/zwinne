@@ -72,6 +72,8 @@ public class ApplicationWindow {
 		dsDialog.setParent(this);
 		dsDialog.setLocationRelativeTo(this.frmGreed);
 		refreshList();
+		frmGreed.setVisible(true);
+		frmGreed.setLocationRelativeTo(null);
 	}
 
 	/**
