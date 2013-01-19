@@ -28,6 +28,7 @@ public class ApplicationWindow {
 	private java.util.List<Download> downloads;
 	private EditDataSourcesDialog edsDialog;
 	private DataSourcesDialog dsDialog;
+	public ActiveDownloadsDialog adDialog;
 	private DefaultListModel listModel = new DefaultListModel();  
 
 	public void refreshList()
@@ -40,7 +41,7 @@ public class ApplicationWindow {
 		for(int i = 0; i < size; i++)
 		{
 			Download d = (Download) downloads.get(i);
-			String el = d.getDownloadTime() + ": " + d.getSource().getAddress() + " (" +
+			String el = d.getDownloadTime() + ": " + d.getSource().getPath() + " from " + d.getSource().getAddress() + " (to " +
 				d.getPath() + ")";
 			this.listModel.addElement(el);
 		}
@@ -73,6 +74,8 @@ public class ApplicationWindow {
 		dsDialog = new DataSourcesDialog();
 		dsDialog.setParent(this);
 		dsDialog.setLocationRelativeTo(this.frmGreed);
+		adDialog = new ActiveDownloadsDialog();
+		adDialog.setLocationRelativeTo(this.frmGreed);
 		refreshList();
 		frmGreed.setVisible(true);
 		frmGreed.setLocationRelativeTo(null);
@@ -114,6 +117,15 @@ public class ApplicationWindow {
 				dsDialog.setVisible(true);
 			}
 		});
+		
+		JMenuItem mntmActiveDownloads = new JMenuItem("Active downloads");
+		mntmActiveDownloads.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				adDialog.refreshList();
+				adDialog.setVisible(true);
+			}
+		});
+		mnDownloads.add(mntmActiveDownloads);
 		mnDownloads.add(mntmDownloadData);
 		
 		JMenuItem mntmEditDataSources = new JMenuItem("Edit data sources");
@@ -144,6 +156,14 @@ public class ApplicationWindow {
 				dsDialog.setVisible(true);
 			}
 		});
+		
+		JButton btnRefresh = new JButton("Refresh");
+		btnRefresh.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				refreshList();
+			}
+		});
+		panel.add(btnRefresh);
 		panel.add(btnDownloadData);
 		
 		JButton btnEditDataSources = new JButton("Edit data sources");

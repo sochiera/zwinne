@@ -15,6 +15,9 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.factories.FormFactory;
+import javax.swing.SwingConstants;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
 
 public class DataSourceDialog extends JDialog {
 
@@ -24,6 +27,8 @@ public class DataSourceDialog extends JDialog {
 	private EditDataSourcesDialog parent;
 	public JTextField textField;
 	public JTextField textField_1;
+	public JTextField textField_2;
+	public JComboBox comboBox;
 	
 	public void setParent(EditDataSourcesDialog p)
 	{
@@ -51,8 +56,10 @@ public class DataSourceDialog extends JDialog {
 			String address = this.address;
 			String login = this.textField.getText();
 			String password = this.textField_1.getText();
+			String path = this.textField_2.getText();
+			String protocol = this.comboBox.getSelectedItem().toString();
 			// dodaj do bazy (address, login, password);
-			System.out.println("Dodaj do bazy (" + address + ", " + login + ", " + password + ")");
+			System.out.println("Dodaj do bazy (" + address + ", " + login + ", " + password + ", " + protocol  + ")");
 			this.parent.refreshList();
 			this.setVisible(false);
 		}
@@ -60,8 +67,10 @@ public class DataSourceDialog extends JDialog {
 			String address = this.address;
 			String login = this.textField.getText();
 			String password = this.textField_1.getText();
+			String path = this.textField_2.getText();
+			String protocol = this.comboBox.getSelectedItem().toString();
 			// ustaw w bazie (address, login, password), gdzie id = ds_id
-			System.out.println("Ustaw w bazie (" + address + ", " + login + ", " + password + ") gdzie id = " + this.ds_id);
+			System.out.println("Ustaw w bazie (" + address + ", " + login + ", " + password + ", " + protocol + ") gdzie id = " + this.ds_id);
 			this.parent.refreshList();
 			this.setVisible(false);
 		}
@@ -97,6 +106,10 @@ public class DataSourceDialog extends JDialog {
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,}));
 		{
 			JLabel lblLogin = new JLabel("Login:");
@@ -115,6 +128,26 @@ public class DataSourceDialog extends JDialog {
 			textField_1 = new JTextField();
 			contentPanel.add(textField_1, "4, 4, fill, default");
 			textField_1.setColumns(10);
+		}
+		{
+			JLabel lblPath = new JLabel("Path:");
+			lblPath.setHorizontalAlignment(SwingConstants.TRAILING);
+			contentPanel.add(lblPath, "2, 6, right, default");
+		}
+		{
+			textField_2 = new JTextField();
+			contentPanel.add(textField_2, "4, 6, fill, default");
+			textField_2.setColumns(10);
+		}
+		{
+			JLabel lblProtocol = new JLabel("Protocol:");
+			lblProtocol.setHorizontalAlignment(SwingConstants.TRAILING);
+			contentPanel.add(lblProtocol, "2, 8, right, default");
+		}
+		{
+			comboBox = new JComboBox();
+			comboBox.setModel(new DefaultComboBoxModel(new String[] {"FTP", "HTTP", "HTTPS"}));
+			contentPanel.add(comboBox, "4, 8, fill, default");
 		}
 		{
 			JPanel buttonPane = new JPanel();

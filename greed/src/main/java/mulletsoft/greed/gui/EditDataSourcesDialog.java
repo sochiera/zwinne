@@ -54,7 +54,7 @@ public class EditDataSourcesDialog extends JDialog {
 		for(int i = 0; i < size; i++)
 		{
 			Source s = (Source) sources.get(i);
-			String el = s.getAddress() + " (login: " + s.getLogin() + ", password: " + 
+			String el = s.getPath() + " at " + s.getAddress() + " (login: " + s.getLogin() + ", password: " + 
 				s.getPassword() + ")";
 			this.listModel.addElement(el);
 		}
@@ -77,6 +77,8 @@ public class EditDataSourcesDialog extends JDialog {
 			dsDialog.setAddress(s.getAddress());
 			dsDialog.textField.setText(s.getLogin());
 			dsDialog.textField_1.setText(s.getPassword());
+			dsDialog.textField_2.setText(s.getPath());
+			dsDialog.comboBox.setSelectedItem(s.getProtocol());
 			dsDialog.setVisible(true);
 			dsDialog.refreshTitle();
 		}
@@ -119,6 +121,8 @@ public class EditDataSourcesDialog extends JDialog {
 			dsDialog.setId(-1);
 			dsDialog.textField.setText("");
 			dsDialog.textField_1.setText("");
+			dsDialog.textField_2.setText("");
+			dsDialog.comboBox.setSelectedIndex(0);
 			dsDialog.setVisible(true);
 			dsDialog.refreshTitle();
 		}

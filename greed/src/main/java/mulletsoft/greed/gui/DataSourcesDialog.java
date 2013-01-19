@@ -45,7 +45,7 @@ public class DataSourcesDialog extends JDialog {
 		for(int i = 0; i < size; i++)
 		{
 			Source s = (Source) sources.get(i);
-			this.listModel.addElement(s.getAddress());
+			this.listModel.addElement(s.getPath() + " at " + s.getAddress());
 		}
 	}
 	
@@ -67,9 +67,11 @@ public class DataSourcesDialog extends JDialog {
 		    	   String address = s.getAddress();
 		    	   String login = s.getLogin();
 		    	   String password = s.getPassword();
+		    	   String sourcePath = s.getPath();
 		    	   System.out.println("Pobierz dane z " + address + " i zapisz w " + path + ", dodaj informacje do bazy");
 		       }
-		       this.parent.refreshList();
+		       this.parent.adDialog.refreshList();
+		       this.parent.adDialog.setVisible(true);
 		    }
 		}
 	}
