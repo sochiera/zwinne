@@ -5,45 +5,30 @@ import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import mulletsoft.greed.model.Download;
+import mulletsoft.greed.model.Source;
+
 import org.apache.commons.io.IOUtils;
 
-public class HTTPSDownloader implements Downloader {
+public class HTTPSDownloader extends Downloader {
   
-  private String address;
-  private String file;
-  
-  private Exception error = null;
-  private String result;
-  
-  public HTTPSDownloader(String address, String file) {
-    this.address = address;
-    this.file = file;
+  public HTTPSDownloader(Download download) {
+    super(download);
   }
 
   public void run() {
-    String path = address + "/" + file;
+    Source s = getDownload().getSource();
+    String path = "https://" + s.getAddress() + "/" + s.getPath();
     try{
       URL url = new URL(path);
       HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
     
       StringWriter sw = new StringWriter();
       IOUtils.copy(conn.getInputStream(), sw);
-      result = sw.toString();
+      setResult(sw.toString());
     }
     catch(Exception e){
-      error = e;
+      setError(e);
     }
-  }
-
-  public String getResult() {
-    return result;
-  }
-
-  public Exception getError() {
-    return error;
-  }
-
-  public boolean wasSuccessful() {
-    return error == null;
   }
 }

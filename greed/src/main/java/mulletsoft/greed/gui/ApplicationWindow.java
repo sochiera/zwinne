@@ -1,24 +1,28 @@
 package mulletsoft.greed.gui;
 
-import java.awt.EventQueue;
-
-import javax.swing.DefaultListModel;
-import javax.swing.JFrame;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import java.awt.BorderLayout;
-import javax.swing.JScrollPane;
-import javax.swing.JPanel;
+import java.awt.EventQueue;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JList;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
 
 import mulletsoft.greed.model.Download;
+import mulletsoft.greed.model.User;
+import mulletsoft.greed.net.DownloadManager;
+
+import org.hibernate.cfg.Configuration;
 
 public class ApplicationWindow {
 
@@ -27,21 +31,36 @@ public class ApplicationWindow {
 	private java.util.List<Download> downloads;
 	private EditDataSourcesDialog edsDialog;
 	private DataSourcesDialog dsDialog;
+	public ActiveDownloadsDialog adDialog;
 	private DefaultListModel listModel = new DefaultListModel();  
 
+	private ApplicationContext appContext;
+  private Thread downloadManagerThread;
+	
+	
 	public void refreshList()
 	{
-		//Pobieranie listy downloadow
-		System.out.println("Pobieranie listy wszystkich downloadow");
+	  appContext.openSession();
+	  downloads = appContext.getAll(Download.class);
 		this.listModel.clear();
+		
 		int size = downloads.size();
 		for(int i = 0; i < size; i++)
 		{
 			Download d = (Download) downloads.get(i);
-			String el = d.getDownloadTime() + ": " + d.getSource() + " (" +
-				d.getPath() + ")";
+			String el = "";
+			if(d.getSource() != null){
+			  el = d.getDownloadTime() + " : " + d.getSource().getPath() + " from " + 
+			    d.getSource().getAddress() + " (to " + d.getPath() + ")";
+			}
+			else{
+	       el = d.getDownloadTime() + " : (to " + d.getPath() + ")";
+			}
+			
 			this.listModel.addElement(el);
 		}
+		
+		appContext.closeSession();
 	}
 	
 	/**
@@ -66,15 +85,25 @@ public class ApplicationWindow {
 	 */
 	public ApplicationWindow() {
 		initialize();
-		edsDialog = new EditDataSourcesDialog();
+		
+    appContext = new ApplicationContext(new DownloadManager(null));
+    appContext.getDownloadManager().setContext(appContext);
+    
+    downloadManagerThread = new Thread(appContext.getDownloadManager());
+    downloadManagerThread.start();
+    
+    edsDialog = new EditDataSourcesDialog(appContext);
 		edsDialog.setLocationRelativeTo(this.frmGreed);
-		dsDialog = new DataSourcesDialog();
+		dsDialog = new DataSourcesDialog(appContext);
 		dsDialog.setName("dsDialog");
 		dsDialog.setParent(this);
 		dsDialog.setLocationRelativeTo(this.frmGreed);
-		refreshList();
+		adDialog = new ActiveDownloadsDialog(appContext);
+		adDialog.setLocationRelativeTo(this.frmGreed);
+		
 		frmGreed.setVisible(true);
 		frmGreed.setLocationRelativeTo(null);
+    refreshList();
 	}
 
 	/**
@@ -96,6 +125,9 @@ public class ApplicationWindow {
 		mntmQuit.setName("mntmQuit");
 		mntmQuit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				dsDialog.dispose();
+				edsDialog.dsDialog.dispose();
+				edsDialog.dispose();
 				frmGreed.dispose();
 			}
 		});
@@ -111,6 +143,15 @@ public class ApplicationWindow {
 				dsDialog.setVisible(true);
 			}
 		});
+		
+		JMenuItem mntmActiveDownloads = new JMenuItem("Active downloads");
+		mntmActiveDownloads.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				adDialog.refreshList();
+				adDialog.setVisible(true);
+			}
+		});
+		mnDownloads.add(mntmActiveDownloads);
 		mnDownloads.add(mntmDownloadData);
 		
 		JMenuItem mntmEditDataSources = new JMenuItem("Edit data sources");
@@ -127,6 +168,7 @@ public class ApplicationWindow {
 		frmGreed.getContentPane().add(scrollPane, BorderLayout.CENTER);
 		this.listModel = new DefaultListModel();
 		list = new JList(this.listModel);
+		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		scrollPane.setViewportView(list);
 		
 		JPanel panel = new JPanel();
@@ -141,6 +183,14 @@ public class ApplicationWindow {
 				dsDialog.setVisible(true);
 			}
 		});
+		
+		JButton btnRefresh = new JButton("Refresh");
+		btnRefresh.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				refreshList();
+			}
+		});
+		panel.add(btnRefresh);
 		panel.add(btnDownloadData);
 		
 		JButton btnEditDataSources = new JButton("Edit data sources");
