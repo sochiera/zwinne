@@ -19,6 +19,7 @@ import javax.swing.JButton;
 import javax.swing.JList;
 
 import mulletsoft.greed.model.Download;
+import javax.swing.ListSelectionModel;
 
 public class ApplicationWindow {
 
@@ -32,13 +33,14 @@ public class ApplicationWindow {
 	public void refreshList()
 	{
 		//Pobieranie listy downloadow
+		//downloads = ...
 		System.out.println("Pobieranie listy wszystkich downloadow");
 		this.listModel.clear();
 		int size = downloads.size();
 		for(int i = 0; i < size; i++)
 		{
 			Download d = (Download) downloads.get(i);
-			String el = d.getDownloadTime() + ": " + d.getSource() + " (" +
+			String el = d.getDownloadTime() + ": " + d.getSource().getAddress() + " (" +
 				d.getPath() + ")";
 			this.listModel.addElement(el);
 		}
@@ -94,6 +96,9 @@ public class ApplicationWindow {
 		JMenuItem mntmQuit = new JMenuItem("Quit");
 		mntmQuit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				dsDialog.dispose();
+				edsDialog.dsDialog.dispose();
+				edsDialog.dispose();
 				frmGreed.dispose();
 			}
 		});
@@ -125,6 +130,7 @@ public class ApplicationWindow {
 		frmGreed.getContentPane().add(scrollPane, BorderLayout.CENTER);
 		this.listModel = new DefaultListModel();
 		list = new JList(this.listModel);
+		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		scrollPane.setViewportView(list);
 		
 		JPanel panel = new JPanel();

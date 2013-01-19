@@ -30,7 +30,7 @@ public class EditDataSourcesDialog extends JDialog {
 	private JTextField textField;
 	private java.util.List<Source> sources;
 	private JList list;
-	private DataSourceDialog dsDialog;
+	public DataSourceDialog dsDialog;
 	private DefaultListModel listModel = new DefaultListModel();  
 
 	/**
@@ -101,6 +101,7 @@ public class EditDataSourcesDialog extends JDialog {
 			if(n == 0){
 				//delete source with id = s_id
 				System.out.println("Usun zrodlo danych o id = " + s_id);
+				this.refreshList();
 			}
 		}
 	}
