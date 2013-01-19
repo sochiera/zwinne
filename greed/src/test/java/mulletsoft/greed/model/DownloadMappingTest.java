@@ -14,7 +14,7 @@ public class DownloadMappingTest extends MappingTest {
 
   public void testMapping(){
     Source source = new Source();
-    source.setAddress("http://www.google.pl");
+    source.setAddress(" http://www.google.pl");
     
     User user = new User();
     user.setName("name");
